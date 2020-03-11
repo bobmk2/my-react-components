@@ -2,6 +2,9 @@ import React, { ReactNode, useContext } from 'react';
 import { RangeContext } from './context';
 
 export type RangeInvalidLabelProps = {
+  /**
+   * Children
+   */
   children?: ReactNode;
 };
 

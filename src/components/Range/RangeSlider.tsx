@@ -2,7 +2,13 @@ import React, { useContext, CSSProperties } from 'react';
 import { RangeContext } from './context';
 
 export type RangeSliderProps = {
+  /**
+   * CSS class name
+   */
   className?: string;
+  /**
+   * CSS style
+   */
   style?: CSSProperties;
 };
 
