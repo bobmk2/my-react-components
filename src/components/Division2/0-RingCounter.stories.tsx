@@ -53,7 +53,7 @@ export const SecondHandClock = () => {
       value={second + 1}
       max={60}
       padAngle={number('Padding angle', 0.02)}
-      fontSize={number('Font size', 60)}
+      countFontSize={number('Count font size', 60)}
     ></RingCounter>
   );
 };
@@ -63,9 +63,9 @@ export const CustomColor = () => {
     <RingCounter
       value={number('Value', 7)}
       max={number('Max', 10)}
-      color={text('Meter Color', '#0088FF')}
-      backgroundColor={text('Background color', '#333')}
-      fontColor={text('Font color', '#00AAFF')}
+      activeColor={text('Active color', '#0088FF')}
+      nonActiveColor={text('Non-active color', '#333')}
+      countFontColor={text('Count font color', '#00AAFF')}
       strokeColor={text('Stroke color', '#000')}
     ></RingCounter>
   );
@@ -75,10 +75,23 @@ export const MultiMeterColors = () => {
   return (
     <RingCounter
       size={number('Size', 200)}
-      value={number('Value', 5)}
+      value={number('Value', 5, { min: 0, max: 5 })}
       max={number('Max', 5)}
-      color={array('Colors', ['#300', '#600', '#900', '#B00', '#E00'])}
-      fontSize={number('Font size', 60)}
+      activeColor={array('Active Colors', ['#300', '#600', '#900', '#B00', '#E00'])}
+      countFontSize={number('Count font size', 60)}
     ></RingCounter>
+  );
+};
+
+export const CountFormat = () => {
+  const countFormatter = useCallback((count: number) => `🍣 ${count}`, []);
+
+  return (
+    <RingCounter
+      value={number('Value', 1)}
+      max={number('Max', 5)}
+      countFontSize={number('Count font size', 20)}
+      countFormatter={countFormatter}
+    />
   );
 };
