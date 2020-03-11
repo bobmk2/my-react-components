@@ -3,7 +3,13 @@ import { RangeContext } from './context';
 import { usePrevious } from '../../hooks/use-previous';
 
 export type RangeInputProps = {
+  /**
+   * CSS class name
+   */
   className?: string;
+  /**
+   * CSS style
+   */
   style?: CSSProperties;
 };
 
@@ -25,8 +31,6 @@ const RangeInput = (props: RangeInputProps) => {
     [onChangeInput]
   );
 
-  // const isValid = React.useMemo(() => !isNaN(parseFloat(_value)), [_value]);
-
   React.useEffect(() => {
     const parsed = parseFloat(_value);
     if ((value !== prevValue || (_value !== '' && !isNaN(parsed))) && value !== parsed) {
@@ -37,7 +41,6 @@ const RangeInput = (props: RangeInputProps) => {
   return (
     <>
       <input className={className} style={style} type='text' value={_value} onChange={handleChange} />
-      {/* {!isValid ? <span style={{ color: 'red' }}>invalid</span> : null} */}
     </>
   );
 };
