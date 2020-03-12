@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 import { RingCounter } from './RingCounter';
-import { text, number, array } from '@storybook/addon-knobs';
+import { text, number, array, boolean } from '@storybook/addon-knobs';
 
 export default {
   title: 'Division 2/RingCounter',
@@ -9,7 +9,7 @@ export default {
 };
 
 export const Example = () => {
-  return <RingCounter size={number('Ring size', 100)} value={number('Value', 2)} max={number('Max', 10)}></RingCounter>;
+  return <RingCounter size={number('Ring size', 100)} value={number('Value', 2)} max={number('Max', 10)} />;
 };
 
 export const Counter = () => {
@@ -29,7 +29,7 @@ export const Counter = () => {
         <button onClick={handleDecrement}>-1</button>
       </div>
 
-      <RingCounter value={value} max={20} padAngle={0.05}></RingCounter>
+      <RingCounter value={value} max={20} padAngle={0.05} />
     </>
   );
 };
@@ -54,7 +54,7 @@ export const SecondHandClock = () => {
       max={60}
       padAngle={number('Padding angle', 0.02)}
       countFontSize={number('Count font size', 60)}
-    ></RingCounter>
+    />
   );
 };
 
@@ -67,23 +67,26 @@ export const CustomColor = () => {
       nonActiveColor={text('Non-active color', '#333')}
       countFontColor={text('Count font color', '#00AAFF')}
       strokeColor={text('Stroke color', '#000')}
-    ></RingCounter>
+    />
   );
 };
 
-export const MultiMeterColors = () => {
+export const CustomRing = () => {
   return (
     <RingCounter
-      size={number('Size', 200)}
-      value={number('Value', 5, { min: 0, max: 5 })}
-      max={number('Max', 5)}
-      activeColor={array('Active Colors', ['#300', '#600', '#900', '#B00', '#E00'])}
-      countFontSize={number('Count font size', 60)}
-    ></RingCounter>
+      size={number('Size', 100)}
+      value={number('Value', 7)}
+      max={number('Max', 10)}
+      strokeColor={'#666666'}
+      padAngle={number('Pad angle', 0.3)}
+      strokeWidth={number('Stroke width', 3)}
+      outerRadius={number('Outer radius', 40)}
+      innerRadius={number('Inner radius', 20)}
+    />
   );
 };
 
-export const CountFormat = () => {
+export const CustomCount = () => {
   const countFormatter = useCallback((count: number) => `🍣 ${count}`, []);
 
   return (
@@ -92,6 +95,28 @@ export const CountFormat = () => {
       max={number('Max', 5)}
       countFontSize={number('Count font size', 20)}
       countFormatter={countFormatter}
+      countFontColor={text('Count font color', '#F66')}
     />
+  );
+};
+
+export const MultiMeterColors = () => {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <RingCounter
+        activeColor={array('Active Colors', ['#300', '#600', '#900', '#B00', '#E00'])}
+        size={200}
+        value={number('Large value', 5)}
+        max={5}
+        countFontSize={60}
+        repeatActiveColor={boolean('Repeat active color', true)}
+      />
+      <RingCounter
+        activeColor={array('Active Colors', ['#300', '#600', '#900', '#B00', '#E00'])}
+        value={number('Small value', 8)}
+        max={10}
+        repeatActiveColor={boolean('Repeat active color', true)}
+      />
+    </div>
   );
 };

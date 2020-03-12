@@ -17,6 +17,16 @@ export type RingCounterProps = {
    */
   max: number;
   /**
+   * Ring outer radius
+   * @default (size - (strokeWidth * 2)) / 2
+   */
+  outerRadius?: number;
+  /**
+   * Ring inner radius
+   * @default outerRadius * 0.35
+   */
+  innerRadius?: number;
+  /**
    * Angle padding
    * @default 0.1
    */
@@ -27,11 +37,24 @@ export type RingCounterProps = {
    */
   strokeColor: string;
   /**
+   * Stroke width
+   * @default 1
+   */
+  strokeWidth: number;
+  /**
    * Active meter color
    * When you required to change color each meters, you should set array.
    * @default #EC6226
    */
   activeColor: string | string[];
+  /**
+   * If the value is greater than the color size, repeat active color.
+   * If you set this value to false, the larger active meter uses last color setting in array.
+   *
+   * @memo This setting is ONLY available when you set array to 'color' props.
+   * @default true
+   */
+  repeatActiveColor: boolean;
   /**
    * Non-active meter color
    * @default #CCC
@@ -59,8 +82,12 @@ const RingCounter = (props: RingCounterProps) => {
     max,
     size,
     padAngle,
+    outerRadius,
+    innerRadius,
     strokeColor,
+    strokeWidth,
     activeColor,
+    repeatActiveColor,
     nonActiveColor,
     countFontSize,
     countFontColor,
@@ -100,17 +127,22 @@ const RingCounter = (props: RingCounterProps) => {
 
     const arc = d3
       .arc()
-      .outerRadius(size / 2)
-      .innerRadius(size * 0.35);
+      .outerRadius(outerRadius ?? (size - strokeWidth * 2) / 2)
+      .innerRadius(innerRadius ?? size * 0.35);
 
     pieGroup
       .append('path')
       // @ts-ignore
       .attr('d', arc)
       .attr('fill', (_: number, index: number) => {
-        return index < value ? _color[index % _color.length] : nonActiveColor;
+        if (!repeatActiveColor) {
+          return index < value ? _color[index >= _color.length ? _color.length - 1 : index] : nonActiveColor;
+        } else {
+          return index < value ? _color[index % _color.length] : nonActiveColor;
+        }
       })
-      .attr('stroke', strokeColor);
+      .attr('stroke', strokeColor)
+      .attr('stroke-width', strokeWidth);
 
     const text = g
       .append('text')
@@ -125,7 +157,22 @@ const RingCounter = (props: RingCounterProps) => {
     if (node !== null) {
       text.attr('dy', node.getBoundingClientRect().height / 2);
     }
-  }, [max, value, size, padAngle, strokeColor, _color, nonActiveColor, countFontSize, countFontColor, countText]);
+  }, [
+    max,
+    value,
+    size,
+    padAngle,
+    outerRadius,
+    innerRadius,
+    repeatActiveColor,
+    strokeColor,
+    strokeWidth,
+    _color,
+    nonActiveColor,
+    countFontSize,
+    countFontColor,
+    countText
+  ]);
 
   return <svg ref={rootRef}></svg>;
 };
@@ -134,7 +181,9 @@ RingCounter.defaultProps = {
   size: 100,
   max: 10,
   padAngle: 0.1,
+  repeatActiveColor: true,
   strokeColor: 'white',
+  strokeWidth: 1,
   activeColor: '#EC6226',
   nonActiveColor: '#CCC',
   countFontSize: 28,
